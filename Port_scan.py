@@ -1,4 +1,5 @@
 import socket
+import sys
 
 def is_port_open(host, port):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -7,9 +8,15 @@ def is_port_open(host, port):
     sock.close()
     return result == 0
 
-host = "127.0.0.1"
+# The target must be given on the command line
+if len(sys.argv) != 2:
+    print("Usage: python port_scan.py <host>")
+    sys.exit(1)
 
-# Test every port from 1 to 9000
-for port in range(1, 9001):
+host = sys.argv[1]
+print(f"Scanning {host}...")
+
+# Scan the well-known ports (1 to 1024)
+for port in range(1, 1025):
     if is_port_open(host, port):
         print(f"Port {port} is open")
